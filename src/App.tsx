@@ -1,41 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { FileUploader } from './components/FileUploader';
+import { useMarkdownStore } from './store/useMarkdownStore';
+import { MarkdownCard } from './components/MarkdownCard';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const files = useMarkdownStore((state) => state.files);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen w-full bg-gray-50 p-10">
+      <FileUploader />
+
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {files.map((file) => (
+          <MarkdownCard key={file.id} name={file.name} content={file.content} />
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-      <div className="p-10 text-3xl font-bold text-blue-500">
-        Tailwind 작동 확인!
-      </div>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
