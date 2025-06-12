@@ -13,9 +13,10 @@ export const FileUploader = () => {
             const id = `${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
 
             addFile({
-            id,
-            name: file.name,
-            content: reader.result,
+                id,
+                name: file.name,
+                content: reader.result,
+                uploadedAt: Date.now(),
             });
         }
         };
