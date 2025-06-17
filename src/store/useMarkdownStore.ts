@@ -8,6 +8,7 @@ type State = {
   files: MarkdownFile[];
   selectedFile: MarkdownFile | null;
   sortBy: SortBy;
+  setFiles: (files: MarkdownFile[]) => void;
   setSortBy: (sortBy: SortBy) => void;
   addFile: (file: MarkdownFile) => void;
   selectFile: (file: MarkdownFile) => void;
@@ -18,6 +19,7 @@ export const useMarkdownStore = create<State>((set) => ({
   files: [],
   selectedFile: null,
   sortBy: SortBy.TIME,
+  setFiles: (files) => set({ files }),
   setSortBy: (sortBy) => set({ sortBy }),
   addFile: (file) => set((state) => ({ files: [...state.files, file] })),
   selectFile: (file) => set({ selectedFile: file }),

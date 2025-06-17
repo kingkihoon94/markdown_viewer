@@ -1,10 +1,14 @@
+import { useEffect } from 'react';
 import { FileUploader } from './components/FileUploader';
 import { MarkdownModal } from './components/MarkdownModal';
+import { MarkdownCarousel } from './components/MarkdownCarousel';
 
 import { useMarkdownStore } from './store/useMarkdownStore';
 
 import { SortBy } from './constants/constants';
-import { MarkdownCarousel } from './components/MarkdownCarousel';
+
+import { useMarkdowns } from './hooks/useMarkdown';
+
 
 function App() {
   const files = useMarkdownStore((state) => state.files);
@@ -14,11 +18,27 @@ function App() {
   const sortBy = useMarkdownStore((state) => state.sortBy);
   const setSortBy = useMarkdownStore((state) => state.setSortBy);
 
+  const { data, isSuccess } = useMarkdowns();
+
+  const setFiles = useMarkdownStore((state) => state.setFiles);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const loaded = data.map((item: { id: string; title: string; content: string }) => ({
+        id: item.id,
+        name: item.title,
+        content: item.content,
+        uploadedAt: Date.now(), // 서버에는 timestamp 없으므로 클라이언트 기준
+      }));
+      setFiles(loaded); // ✅ 한번에 교체
+    }
+  }, [isSuccess, data, setFiles]);
+
   const sortedFiles = [...files].sort((a, b) => {
     if (sortBy === SortBy.TIME) {
-      return b.uploadedAt - a.uploadedAt; // 최신순
+      return b.uploadedAt - a.uploadedAt;
     } else {
-      return a.name.localeCompare(b.name); // 제목순
+      return a.name.localeCompare(b.name);
     }
   });
 
