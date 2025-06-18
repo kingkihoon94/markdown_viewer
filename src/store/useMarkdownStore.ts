@@ -12,10 +12,11 @@ type State = {
   setSortBy: (sortBy: SortBy) => void;
   addFile: (file: MarkdownFile) => void;
   selectFile: (file: MarkdownFile) => void;
+  deleteFile: (id: string) => void;
   clearSelection: () => void;
 };
 
-export const useMarkdownStore = create<State>((set) => ({
+export const useMarkdownStore = create<State>((set, get) => ({
   files: [],
   selectedFile: null,
   sortBy: SortBy.TIME,
@@ -24,4 +25,12 @@ export const useMarkdownStore = create<State>((set) => ({
   addFile: (file) => set((state) => ({ files: [...state.files, file] })),
   selectFile: (file) => set({ selectedFile: file }),
   clearSelection: () => set({ selectedFile: null }),
+  deleteFile: (id: string) => {
+    set((state) => ({
+      files: state.files.filter((file) => file.id !== id),
+      selectedFile:
+        state.selectedFile?.id === id ? null : state.selectedFile,
+    }));
+  },
 }));
+

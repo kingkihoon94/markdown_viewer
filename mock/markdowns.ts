@@ -35,11 +35,25 @@ export default [
       return {
         message: '업로드 성공',
         item: {
-          id: filename.replace(/\.md$/, ''),
+          id: filename.replace(/\\.md$/, ''),
           title: filename,
           content: body.content,
         },
       };
+    },
+  },
+  {
+    url: '/api/markdowns/:id',
+    method: 'delete',
+    response: ({ query }: { query: { id: string } }) => {
+      const id = query.id;
+      const filePath = path.join(markdownDir, `${id}.md`);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        return { message: '삭제 성공' };
+      } else {
+        return { message: '파일을 찾을 수 없습니다.', status: 404 };
+      }
     },
   },
 ] as MockMethod[];
