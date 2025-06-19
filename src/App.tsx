@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { FileUploader } from './components/FileUploader';
 import { MarkdownModal } from './components/MarkdownModal';
 import { MarkdownCarousel } from './components/MarkdownCarousel';
@@ -34,13 +34,13 @@ function App() {
     }
   }, [isSuccess, data, setFiles]);
 
-  const sortedFiles = [...files].sort((a, b) => {
-    if (sortBy === SortBy.TIME) {
-      return b.uploadedAt - a.uploadedAt;
-    } else {
-      return a.name.localeCompare(b.name);
-    }
-  });
+  const sortedFiles = useMemo(() => {
+    return [...files].sort((a, b) => {
+      return sortBy === SortBy.TIME
+        ? b.uploadedAt - a.uploadedAt
+        : a.name.localeCompare(b.name);
+    });
+  }, [files, sortBy]);
 
   return (
     <div className="min-h-screen w-full bg-gray-50 p-10">
