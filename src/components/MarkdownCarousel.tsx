@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MarkdownCard } from './MarkdownCard';
 import type { MarkdownFile } from '../types/types';
 
 type Props = {
   files: MarkdownFile[];
+  focusId?: string;
 };
 
-export const MarkdownCarousel = ({ files }: Props) => {
+export const MarkdownCarousel = ({ files, focusId }: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const length = files.length;
+
+  // 마크다운 수정 기능으로 제목이 바뀌여서 files 내 정렬 상태가 변한다면 포커스 재정렬이 필요함.
+  useEffect(() => {
+    if (!focusId) return;
+    const newIndex = files.findIndex((file) => file.id === focusId);
+    if (newIndex !== -1) {
+      setCurrentIndex(newIndex);
+    }
+  }, [focusId, files]);
 
   // 👉 파일이 0개일 때 안내 메시지 출력
   if (length === 0) {

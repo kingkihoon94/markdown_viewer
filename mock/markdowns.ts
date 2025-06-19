@@ -44,6 +44,36 @@ export default [
   },
   {
     url: '/api/markdowns/:id',
+    method: 'put',
+    response: ({ query, body }: { query: { id: string }, body: { title: string, content: string } }) => {
+      const id = query.id;
+      const oldPath = path.join(markdownDir, `${id}.md`);
+      const newPath = path.join(markdownDir, body.title);
+
+      if (!fs.existsSync(oldPath)) {
+        return { message: '기존 파일을 찾을 수 없습니다.', status: 404 };
+      }
+
+      // 파일명이 바뀌었으면 rename
+      if (oldPath !== newPath) {
+        fs.renameSync(oldPath, newPath);
+      }
+
+      // 내용 덮어쓰기
+      fs.writeFileSync(newPath, body.content, 'utf-8');
+
+      return {
+        message: '수정 성공',
+        item: {
+          id: body.title.replace(/\.md$/, ''),
+          title: body.title,
+          content: body.content,
+        },
+      };
+    },
+  },
+  {
+    url: '/api/markdowns/:id',
     method: 'delete',
     response: ({ query }: { query: { id: string } }) => {
       const id = query.id;

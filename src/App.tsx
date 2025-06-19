@@ -61,7 +61,7 @@ function App() {
         </button>
       </div>
 
-      <MarkdownCarousel files={sortedFiles} />
+      <MarkdownCarousel files={sortedFiles} focusId={selected?.id}/>
       {selected && <MarkdownModal onClose={clear} />}
     </div>
   );

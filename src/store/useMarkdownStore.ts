@@ -13,6 +13,7 @@ type State = {
   addFile: (file: MarkdownFile) => void;
   selectFile: (file: MarkdownFile) => void;
   deleteFile: (id: string) => void;
+  updateFile: (updated: MarkdownFile, prevId: string) => void;
   clearSelection: () => void;
 };
 
@@ -24,7 +25,6 @@ export const useMarkdownStore = create<State>((set, get) => ({
   setSortBy: (sortBy) => set({ sortBy }),
   addFile: (file) => set((state) => ({ files: [...state.files, file] })),
   selectFile: (file) => set({ selectedFile: file }),
-  clearSelection: () => set({ selectedFile: null }),
   deleteFile: (id: string) => {
     set((state) => ({
       files: state.files.filter((file) => file.id !== id),
@@ -32,5 +32,11 @@ export const useMarkdownStore = create<State>((set, get) => ({
         state.selectedFile?.id === id ? null : state.selectedFile,
     }));
   },
+  updateFile: (updated, prevId) => {
+    set((state) => ({
+      files: state.files.map((file) => file.id === prevId ? updated : file),
+    }));
+  },
+  clearSelection: () => set({ selectedFile: null }),
 }));
 

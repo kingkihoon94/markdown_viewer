@@ -1,13 +1,15 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useMarkdownStore } from '../store/useMarkdownStore';
-import { useDeleteMarkdown } from '../hooks/useDeleteMarkdown'; // 🔥 추가
+import { useDeleteMarkdown } from '../hooks/useDeleteMarkdown';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   onClose: () => void;
 };
 
 export const MarkdownModal = ({ onClose }: Props) => {
+  const navigate = useNavigate();
   const { selectedFile, deleteFile } = useMarkdownStore();
   const { mutate: deleteMarkdown } = useDeleteMarkdown();
 
@@ -35,6 +37,7 @@ export const MarkdownModal = ({ onClose }: Props) => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{selectedFile.name}</h2>
           <div className="flex gap-2 items-center">
+            <button className="text-sm text-blue-500 hover:underline leading-none" onClick={() => {navigate(`/edit/${selectedFile.id}`);}}>수정</button>
             <button className="text-sm text-red-500 hover:underline leading-none" onClick={handleDelete}>삭제</button>
           </div>
         </div>
