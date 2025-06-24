@@ -1,26 +1,24 @@
 import { useEffect, useMemo } from 'react';
-import { FileUploader } from './components/FileUploader';
-import { MarkdownModal } from './components/MarkdownModal';
-import { MarkdownCarousel } from './components/MarkdownCarousel';
 
-import { useMarkdownStore } from './store/useMarkdownStore';
+import { FileUploader } from '../components/FileUploader';
+import { MarkdownModal } from '../components/MarkdownModal';
+import { MarkdownCarousel } from '../components/MarkdownCarousel';
 
-import { SortBy } from './constants/constants';
+import { useMarkdownStore } from '../store/useMarkdownStore';
 
-import { useMarkdowns } from './hooks/useMarkdown';
+import { SortBy } from '../constants/constants';
 
+import { useMarkdowns } from '../hooks/useMarkdown';
 
-function App() {
+function HomePage() {
   const files = useMarkdownStore((state) => state.files);
   const selected = useMarkdownStore((state) => state.selectedFile);
   const clear = useMarkdownStore((state) => state.clearSelection);
-
   const sortBy = useMarkdownStore((state) => state.sortBy);
   const setSortBy = useMarkdownStore((state) => state.setSortBy);
+  const setFiles = useMarkdownStore((state) => state.setFiles);
 
   const { data, isSuccess } = useMarkdowns();
-
-  const setFiles = useMarkdownStore((state) => state.setFiles);
 
   useEffect(() => {
     if (isSuccess) {
@@ -28,9 +26,9 @@ function App() {
         id: item.id,
         name: item.title,
         content: item.content,
-        uploadedAt: Date.now(), // 서버에는 timestamp 없으므로 클라이언트 기준
+        uploadedAt: Date.now(),
       }));
-      setFiles(loaded); // ✅ 한번에 교체
+      setFiles(loaded);
     }
   }, [isSuccess, data, setFiles]);
 
@@ -45,7 +43,6 @@ function App() {
   return (
     <div className="min-h-screen w-full bg-gray-50 p-10">
       <FileUploader />
-
       <div className="mt-6 mb-4 flex gap-2">
         <button
           onClick={() => setSortBy('time')}
@@ -60,11 +57,10 @@ function App() {
           🔤 제목순
         </button>
       </div>
-
-      <MarkdownCarousel files={sortedFiles} focusId={selected?.id}/>
+      <MarkdownCarousel files={sortedFiles} focusId={selected?.id} />
       {selected && <MarkdownModal onClose={clear} />}
     </div>
   );
 }
 
-export default App;
+export default HomePage;
