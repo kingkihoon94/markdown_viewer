@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useMarkdownStore } from '../store/useMarkdownStore';
-import { useDeleteMarkdown } from '../hooks/useDeleteMarkdown';
+import { useDeleteMarkdown } from '../hooks/queries/useDeleteMarkdown';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {

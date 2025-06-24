@@ -1,4 +1,4 @@
-import { useUploadMarkdown } from '../hooks/useUploadMarkdown';
+import { useUploadMarkdown } from '../hooks/queries/useUploadMarkdown';
 import { useMarkdownStore } from '../store/useMarkdownStore';
 
 export const FileUploader = () => {

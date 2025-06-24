@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMarkdownStore } from '../store/useMarkdownStore';
 import { useState } from 'react';
-import { useUpdateMarkdown } from '../hooks/useUpdateMarkdown';
+import { useUpdateMarkdown } from '../hooks/queries/useUpdateMarkdown';
 import type { MarkdownFile } from '../types/types';
 
 const EditPage = () => {

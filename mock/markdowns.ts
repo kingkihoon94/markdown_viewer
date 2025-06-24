@@ -24,22 +24,22 @@ export default [
     url: '/api/markdowns',
     method: 'get',
     response: () => {
-      try {
-        const files = fs
-          .readdirSync(markdownDir)
-          .filter((file) => file.endsWith('.md'));
+      const files = fs
+        .readdirSync(markdownDir)
+        .filter((file) => file.endsWith('.md'));
 
-        return files.map((file) => {
-          const content = fs.readFileSync(path.join(markdownDir, file), 'utf-8');
-          return {
-            id: file.replace(/\.md$/, ''),
-            title: file,
-            content,
-          };
-        });
-      } catch (err) {
-        return { message: '파일 목록을 불러오는 중 오류가 발생했습니다.', status: 500 };
-      }
+      return files.map((file) => {
+        const filePath = path.join(markdownDir, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const stat = fs.statSync(filePath); // 👈 파일 메타데이터
+
+        return {
+          id: file.replace(/\.md$/, ''),
+          title: file,
+          content,
+          uploadedAt: stat.birthtimeMs || stat.ctimeMs // ms 단위 timestamp
+        };
+      });
     },
   },
 
